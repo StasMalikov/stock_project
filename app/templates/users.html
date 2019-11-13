@@ -1,0 +1,29 @@
+{% extends 'bootstrap/base.html' %} {% block title %} Склад кондитерских изделий {% endblock %} {% block body %}
+<div class='container-fluid'>
+    <h2>Запросы для таблицы USERS
+    </h2>
+    <div class='row'>
+
+        <div class='col-md-3'>
+            <form action="{{ url_for('users_select') }}">
+                <button type="submit" class="btn btn-primary">select запрос</button>
+            </form>
+        </div>
+        <div class='col-md-3'>
+            <form action="{{ url_for('users_insert') }}">
+                <button type="submit" class="btn btn-primary">insert запрос</button>
+            </form>
+        </div>
+        <div class='col-md-3'>
+            <form action="{{ url_for('users_update') }}">
+                <button type="submit" class="btn btn-primary">uptade запрос</button>
+            </form>
+        </div>
+        <div class='col-md-3'>
+            <form action="{{ url_for('users_delete') }}">
+                <button type="submit" class="btn btn-primary">delete запрос</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

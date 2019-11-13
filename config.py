@@ -1,0 +1,7 @@
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+class Config(object):
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    # SQLALCHEMY_DATABASE_URI = 'oracle://netcracker:netcracker@localhost:1521/pr_db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
