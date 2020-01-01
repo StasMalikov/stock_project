@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block content %}
+<h3>Управление фабриками</h3>
+<table class="table style=" width:100% >
+    <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название</th>
+            <th scope="col">Местоположение</th>
+            <th scope="col">Владелец</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for i in range(len) %}
+    <form method="post" action="{{ url_for( 'edit_factory') }}">
+    <input class="form-control" type="hidden" name="id" value="{{factories[i][0]}}">
+    <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ factories[i][2] }}</td>
+            <input type="hidden" name="fact_name" value="{{factories[i][2]}}">
+        <td>{{ factories[i][1] }}</td>
+            <input type="hidden" name="location" value="{{factories[i][1]}}">
+        <td>{{ factories[i][4] }}</td>
+            <input type="hidden" name="manuf_name" value="{{factories[i][4]}}">
+        <td>
+        <input type="hidden" name="manuf_id" value="{{factories[i][3]}}">
+        <input class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Изменить'>
+        <input class="btn btn-outline-danger" type='submit' name = 'submit' value = 'Удалить'>
+        </td>
+    </tr>
+    </form>
+    {% endfor %}
+
+    </tbody>
+</table>{% endblock %}

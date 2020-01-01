@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+{% block content %}
+<h3>Редактирование фабрики</h3>
+<form method="post" action="{{ url_for( 'update_factory') }}">
+<input type="hidden" name="id" value="{{ id }}">
+    <div class="form-group">
+        <label>Название фабрики</label>
+        <input class="form-control" type="text" class="form-control" name="fact_name" value="{{ fact_name }}" required="" maxlength='50'>
+    </div>
+    <div class="form-group">
+        <label>Расположение фабрики</label>
+        <input class="form-control" type="text" class="form-control" value="{{ location }}" name="location" required="" maxlength='70'>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Выберите владельца фабрики</label>
+                <select name="manuf_name" class="form-control">
+                <option selected>{{ manuf_name }}</option>
+                {% for i in manufacturers %}
+                    <option>{{ i }}</option>
+                {% endfor %}
+      </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>
+{% endblock %}

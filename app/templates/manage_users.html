@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block content %}
+<h3>Управление пользователями</h3>
+<table class="table style=" width:100% >
+    <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">ФИО</th>
+            <th scope="col">Логин</th>
+            <th scope="col">Почта</th>
+            <th scope="col">Тип пользователя</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in range(len) %}
+    
+    <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ users[i][4] }}</td>
+        <td>{{ users[i][1] }}</td>
+        <td>{{ users[i][2] }}</td>
+        <td>{{ users[i][3] }}</td>
+        <td>
+        <form method="post" action="{{ url_for( 'edit_user') }}">
+        <input type="hidden" name="id" value="{{users[i][0]}}">
+        <input type="hidden" name="full_name"value="{{users[i][4]}}">
+        <input type="hidden" name="login" value="{{ users[i][1] }}">
+        <input type="hidden" name="email" value="{{ users[i][2] }}">
+        <input type="hidden" name="user_type" value="{{ users[i][3] }}">
+        <input class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Изменить'>
+        <input class="btn btn-outline-danger" type='submit' name = 'submit' value = 'Удалить'>
+        </form>
+        </td>
+    </tr>
+    
+    {% endfor %}
+
+    </tbody>
+</table>{% endblock %}

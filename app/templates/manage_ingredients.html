@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block content %}
+<h3>Управление ингредиентами</h3>
+<table class="table style=" width:100%>
+    <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название ингредиента</th>
+            <th scope="col">Размерность ингредиента</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    <form method="post" action="{{ url_for( 'manage_ingredients') }}">
+    <tr>
+        <th scope="row"> </th>
+        <td> <input class="form-control" name="ing_name" placeholder="Введите название ингредиента" size = '45'></td>
+        <td><input class="form-control" name="dimension"  placeholder="Введите размерность ингредиента " size = '30' ></td>
+        <td>
+        <input class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Добавить'>
+        </td>
+    </tr>
+    </form>
+
+    {% for i in range(len) %}
+    <form method="post" action="{{ url_for( 'manage_ingredients') }}">
+        <input type="hidden" name="id" value="{{ingredients[i][0]}}">
+        <tr>
+            <th scope="row">{{ i + 1 }}</th>
+            <td> <input class="form-control" name="ing_name" value="{{ ingredients[i][1] }}" size = '45'></td>
+            <td><input class="form-control" name="dimension" value="{{ ingredients[i][2] }}" size = '30'></td>
+            <td>
+            <input  class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Сохранить изменения' >
+            <input class="btn btn-outline-danger" type='submit' name = 'submit' value = 'Удалить' >
+            </td>
+        </tr>
+    </form>
+    {% endfor %}
+
+    </tbody>
+</table>{% endblock %}

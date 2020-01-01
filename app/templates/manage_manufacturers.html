@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block content %}
+<h3>Управление производителями</h3>
+<table class="table style=" width:100%>
+    <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название компании</th>
+            <th scope="col">Почта</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    <form method="post" action="{{ url_for( 'manage_manufacturers') }}">
+    <tr>
+        <th scope="row"> </th>
+        <td> <input class="form-control" name="comp_name" placeholder="Введите название компании" size = '45'></td>
+        <td><input class="form-control" name="email"  placeholder="Введите почту компании" size = '30' ></td>
+        <td>
+        <input class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Добавить'>
+        </td>
+    </tr>
+    </form>
+
+    {% for i in range(len) %}
+    <form method="post" action="{{ url_for( 'manage_manufacturers') }}">
+        <input type="hidden" name="id" value="{{manufacturers[i][0]}}">
+        <tr>
+            <th scope="row">{{ i + 1 }}</th>
+            <td> <input class="form-control" name="comp_name" value="{{ manufacturers[i][2] }}" size = '45'></td>
+            <td><input class="form-control" name="email" value="{{ manufacturers[i][1] }}" size = '30'></td>
+            <td>
+            <input  class="btn btn-outline-secondary" type='submit' name = 'submit' value = 'Сохранить изменения' >
+            <input class="btn btn-outline-danger" type='submit' name = 'submit' value = 'Удалить' >
+            </td>
+        </tr>
+    </form>
+    {% endfor %}
+
+    </tbody>
+</table>{% endblock %}

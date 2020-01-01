@@ -1,27 +1,64 @@
-{% extends 'bootstrap/base.html' %}
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 
 <head>
-    {% if title %}
-    <title>{{ title }} - microblog</title>
-    {% else %}
-    <title>microblog</title>
-    {% endif %}
+    {% block head %}
+    <meta charset="UTF-8">
+    <link href="/static/css/bootstrap.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
 </head>
 
 <body>
-    <div>
-        Microblog:
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('login') }}">Login</a>
+    {% block nav %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light pl-5 bg-dark">
+        <a class="navbar-brand" href="#">Sweet stock</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Пользователи</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="/manage_users">Управление пользователями</a>
+                        <a class="dropdown-item" href="/add_user">Добавление пользователей</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Производители</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="/manage_manufacturers">Управление производителями</a>
+                        <a class="dropdown-item" href="/add_factory">Добавление фабрики</a>
+                        <a class="dropdown-item" href="/manage_factories">Управление фабриками</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Товары</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="/manage_product_type">Типы продуктов</a>
+                        <a class="dropdown-item" href="/manage_ingredients">Ингредиенты</a>
+                        <a class="dropdown-item" href="/add_product">Добавление продукта</a>
+                        <a class="dropdown-item" href="/manage_products">Продукты</a>
+                        
+
+                        
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </nav>{% endblock %}
+    <div class="container">
+        {% block content%} {% endblock %}
     </div>
-    <hr> {% with messages = get_flashed_messages() %} {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %} {% endwith %} {% block content %}{% endblock %}
+    {% block scripts %} {% endblock %}
 </body>
 
 </html>
