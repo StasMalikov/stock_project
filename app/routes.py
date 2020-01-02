@@ -10,6 +10,10 @@ from werkzeug.utils import secure_filename
 def index():
     return render_template('index.html',)
 
+@app.route('/test')
+def test():
+    return render_template('test.html',)
+
 @app.route('/sign_in', methods = ['GET','POST'])
 def sign_in():
     if request.method == 'POST':

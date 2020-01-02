@@ -3,27 +3,56 @@
 <h3>Добавление нового продукта</h3>
 <form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'add_product') }}">
 
-        <div class="form-group">
+    <div class="form-row">
+
+        <div class="form-group col-md-5">
             <label>Название продукта</label>
             <input class="form-control" type="text" class="form-control" name="prod_name" required="" maxlength='50'>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-md-4">
             <label>Выберите фабрику</label>
             <select name="factory" class="form-control">
                     {% for i in range(len_f)  %}
                         <option>{{ factories[i][0] }}</option>
                     {% endfor %}
+                    </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-md-3">
             <label>Выберите тип продукта</label>
             <select name="type" class="form-control">
                     {% for i in range(len_t)  %}
                         <option>{{ types[i][0] }}</option>
                     {% endfor %}
+            </select>
         </div>
 
+    </div>
+
+    <div class="form-row">
+
+        <div class="form-group col-md-4">
+            <label>Вес продукта</label>
+            <input class="form-control" min = 1 type="number" class="form-control" name="weight" required="">
+        </div>
+
+        <div class="form-group col-md-4">
+            <label>Рамерность веса</label>
+            <select name="dimension" class="form-control">
+                        <option>гр</option>
+                        <option>кг</option>
+                        <option>л</option>
+                        <option>мл</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label>Калории (ккал)</label>
+            <input class="form-control" min = 1 type="number" class="form-control" name="calorie_content" required="">
+        </div>
+
+    </div>
 
     <div class="form-group">
         <label >Выберите картинку продукта</label>

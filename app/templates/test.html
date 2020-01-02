@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<div class="checkselect">
+	<label><input type="checkbox" name="dimension[]" > Google Inc.</label>
+	<label><input type="checkbox" name="dimension[]" > Apple Inc.</label>
+	<label><input type="checkbox" name="dimension[]" > Microsoft</label>
+	<label><input type="checkbox" name="dimension[]" > Facebook</label>
+	<label><input type="checkbox" name="dimension[]" > Amazon</label>
+	<label><input type="checkbox" name="dimension[]" > Verizon</label>
+</div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+  
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/mltselect.css')}}">
+    <script src="/static/js/mltselect.js"></script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+
+{% endblock %}
