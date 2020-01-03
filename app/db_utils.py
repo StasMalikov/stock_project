@@ -10,10 +10,10 @@ class DbUtils:
         cursor.execute("SELECT ID, NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE FROM PRODUCTS WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
-    def insert_product(name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight):
+    def insert_product(name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, picture):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
-        cursor.execute("insert into PRODUCTS(NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, IS_DELETE) values(?, ?, ?, ?, ?, ?, ?, '0')", (name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight))
+        cursor.execute("insert into PRODUCTS(NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE, IS_DELETE) values(?, ?, ?, ?, ?, ?, ?, ?, '0')", (name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, picture))
         conn.commit()
         return cursor.lastrowid
     
@@ -67,10 +67,19 @@ class DbUtils:
         cursor.execute("SELECT ID, PRODUCT_ID, INGREDIENT_ID FROM PRODUCT_INGREDIENT;")
         return cursor.fetchall()
 
-    def insert_product_ingredient(product_id ,ingredient_id):
+    def insert_product_ingredients(product_id ,ingredients):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
-        cursor.execute("insert into PRODUCT_INGREDIENT(PRODUCT_ID, INGREDIENT_ID) values(?, ?)", (product_id, ingredient_id))
+
+        ing_str = ""
+        for i in range(len(ingredients)):
+            ing_str += "'"+ ingredients[i] + "'"
+            if i < len(ingredients) - 1:
+                ing_str += ", "
+        cursor.execute("SELECT ID FROM INGREDIENTS WHERE IS_DELETE = '0' AND INGREDIENT_NAME IN (%s);" % ing_str)
+        ing_id = cursor.fetchall()
+        for i in range(len(ing_id)):
+            cursor.execute("insert into PRODUCT_INGREDIENT(PRODUCT_ID, INGREDIENT_ID) values(?, ?)", (product_id, ing_id[i][0]))
         conn.commit()
     
     def delete_product_ingredient(id):
@@ -90,6 +99,18 @@ class DbUtils:
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT ID, INGREDIENT_NAME, DIMENSION FROM INGREDIENTS WHERE IS_DELETE = '0';")
+        return cursor.fetchall()
+
+    def select_ingredients_id(ingredients):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        ing_str = ""
+        for i in range(len(ingredients)):
+            ing_str += "'"+ ingredients[i] + "'"
+            if i < len(ingredients) - 1:
+                ing_str += ", "
+        print(ing_str)
+        cursor.execute("SELECT ID FROM INGREDIENTS WHERE IS_DELETE = '0' AND INGREDIENT_NAME IN (%s);" % ing_str)
         return cursor.fetchall()
 
     def insert_ingredients(ingredient_name, dimension):
@@ -123,6 +144,12 @@ class DbUtils:
         cursor.execute("SELECT TYPE_NAME FROM PRODUCT_TYPES WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
+    def select_product_types_id(type_name):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT ID FROM PRODUCT_TYPES WHERE IS_DELETE = '0' AND TYPE_NAME = ?;", [type_name])
+        return cursor.fetchall()
+
     def insert_product_types(type_name):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
@@ -154,6 +181,12 @@ class DbUtils:
             conn = sqlite3.connect("mydatabase.db")
             cursor = conn.cursor()
             cursor.execute("SELECT FACTORY_NAME  FROM FACTORIES WHERE IS_DELETE = 0;")
+            return cursor.fetchall()
+
+    def select_factories_id(fact_name):
+            conn = sqlite3.connect("mydatabase.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT ID FROM FACTORIES WHERE IS_DELETE = 0 AND FACTORY_NAME = ?;", [fact_name])
             return cursor.fetchall()
 
     def insert_factory(location, fact_name, manuf_name):

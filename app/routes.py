@@ -47,14 +47,40 @@ def add_product():
 
         if file.filename == '':
             return render_template('add_product.html')
-        
-        # test = file.filename.split(".")[-1]
-
         file.save(app.config['UPLOAD_FOLDER'] + file.filename)
+
+        expiration = 0
+        expiration_size = request.form['expitation_size']
+        if expiration_size == "час":
+            expiration  = request.form['expitation_value']
+
+        elif expiration_size == "день":
+            expiration = 24*request.form['expitation_value']
+
+        elif expiration_size == "месяц":
+            expiration = 730*request.form['expitation_value']
+
+        elif expiration_size == "год":
+            expiration = 8760*request.form['expitation_value']
+
+        prod_id = DbUtils.insert_product( request.form['prod_name'],\
+                                         DbUtils.select_factories_id(request.form['factory'])[0][0], \
+                                         DbUtils.select_product_types_id(request.form['type'])[0][0], \
+                                         request.form['calorie_content'],\
+                                         expiration,\
+                                         request.form['dimension'],\
+                                         request.form['weight'],\
+                                         file.filename)
+
+        DbUtils.insert_product_ingredients(prod_id, request.form.getlist('ingredient[]'))
+
+        # print(request.form.getlist('ingredient[]'))
+        # return render_template('test.html', test_data = request.form['ingredient[]'])
         
     factories = DbUtils.select_factories_names()
     types = DbUtils.select_product_types_names()
-    return render_template('add_product.html', factories = factories, len_f = len(factories), types = types, len_t = len(types))
+    ingredients = DbUtils.select_ingredients()
+    return render_template('add_product.html', factories = factories, len_f = len(factories), types = types, len_t = len(types), ingredients = ingredients, len_i = len(ingredients))
 
 
 @app.route('/manage_ingredients', methods = ['GET','POST'])
