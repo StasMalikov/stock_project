@@ -4,6 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from app.db_utils import DbUtils
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from app.utils import Utils
 
 @app.route('/')
 @app.route('/index')
@@ -35,8 +36,9 @@ def sign_in():
 
 
 @app.route('/manage_products', methods = ['GET','POST'])
-def manage_products(): 
-    return render_template('manage_products.html')
+def manage_products():
+    products = Utils.get_products()
+    return render_template('manage_products.html', products = products, len_p = len(products))
 
 @app.route('/add_product', methods = ['GET','POST'])
 def add_product():
@@ -49,19 +51,19 @@ def add_product():
             return render_template('add_product.html')
         file.save(app.config['UPLOAD_FOLDER'] + file.filename)
 
-        expiration = 0
         expiration_size = request.form['expitation_size']
+
         if expiration_size == "час":
-            expiration  = request.form['expitation_value']
+            expiration  = int(request.form['expitation_value'])
 
         elif expiration_size == "день":
-            expiration = 24*request.form['expitation_value']
+            expiration = 24*int(request.form['expitation_value'])
 
         elif expiration_size == "месяц":
-            expiration = 730*request.form['expitation_value']
+            expiration = 730*int(request.form['expitation_value'])
 
         elif expiration_size == "год":
-            expiration = 8760*request.form['expitation_value']
+            expiration = 8760*int(request.form['expitation_value'])
 
         prod_id = DbUtils.insert_product( request.form['prod_name'],\
                                          DbUtils.select_factories_id(request.form['factory'])[0][0], \
@@ -73,9 +75,6 @@ def add_product():
                                          file.filename)
 
         DbUtils.insert_product_ingredients(prod_id, request.form.getlist('ingredient[]'))
-
-        # print(request.form.getlist('ingredient[]'))
-        # return render_template('test.html', test_data = request.form['ingredient[]'])
         
     factories = DbUtils.select_factories_names()
     types = DbUtils.select_product_types_names()

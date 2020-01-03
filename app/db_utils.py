@@ -67,6 +67,18 @@ class DbUtils:
         cursor.execute("SELECT ID, PRODUCT_ID, INGREDIENT_ID FROM PRODUCT_INGREDIENT;")
         return cursor.fetchall()
 
+    def select_product_ingredient(prod_id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT    INGREDIENT_NAME
+                            FROM    INGREDIENTS JOIN 
+                                    ( SELECT  INGREDIENT_ID
+                                        FROM PRODUCT_INGREDIENT
+                                        WHERE PRODUCT_ID = ?) AS PI ON
+                                        ID = PI.INGREDIENT_ID
+                                            ;''', [prod_id])
+        return cursor.fetchall()
+
     def insert_product_ingredients(product_id ,ingredients):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
@@ -109,7 +121,6 @@ class DbUtils:
             ing_str += "'"+ ingredients[i] + "'"
             if i < len(ingredients) - 1:
                 ing_str += ", "
-        print(ing_str)
         cursor.execute("SELECT ID FROM INGREDIENTS WHERE IS_DELETE = '0' AND INGREDIENT_NAME IN (%s);" % ing_str)
         return cursor.fetchall()
 
@@ -142,6 +153,12 @@ class DbUtils:
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT TYPE_NAME FROM PRODUCT_TYPES WHERE IS_DELETE = '0';")
+        return cursor.fetchall()
+
+    def select_product_types_name(id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT TYPE_NAME FROM PRODUCT_TYPES WHERE IS_DELETE = '0' AND ID = ?;", [id])
         return cursor.fetchall()
 
     def select_product_types_id(type_name):
@@ -181,6 +198,12 @@ class DbUtils:
             conn = sqlite3.connect("mydatabase.db")
             cursor = conn.cursor()
             cursor.execute("SELECT FACTORY_NAME  FROM FACTORIES WHERE IS_DELETE = 0;")
+            return cursor.fetchall()
+
+    def select_factories_name(id):
+            conn = sqlite3.connect("mydatabase.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT FACTORY_NAME  FROM FACTORIES WHERE IS_DELETE = 0 AND ID = ?;", [id])
             return cursor.fetchall()
 
     def select_factories_id(fact_name):
