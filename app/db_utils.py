@@ -10,6 +10,12 @@ class DbUtils:
         cursor.execute("SELECT ID, NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE FROM PRODUCTS WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
+    def select_product_id(id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT ID, NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE FROM PRODUCTS WHERE IS_DELETE = '0' AND ID = ?;", [id])
+        return cursor.fetchall()
+
     def insert_product(name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, picture):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
@@ -33,6 +39,12 @@ class DbUtils:
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
         cursor.execute("UPDATE PRODUCTS SET NAME = ?, FACTORY_ID = ?, PRODUCT_TYPE_ID = ?, CALORIE_CONTENT = ?, EXPIRATION_DATE = ?, DIMENSION = ?, WEIGHT = ? WHERE ID = ?", (name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, id))
+        conn.commit()
+
+    def update_product_pic(id, name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, picture):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("UPDATE PRODUCTS SET NAME = ?, FACTORY_ID = ?, PRODUCT_TYPE_ID = ?, CALORIE_CONTENT = ?, EXPIRATION_DATE = ?, DIMENSION = ?, WEIGHT = ?, PICTURE = ? WHERE ID = ?", (name, factory_id, product_type_id, calorie_content, expiration_date, dimension, weight, picture, id))
         conn.commit()
 
 # -----------------------PRODUCT_UNITS------------METHODS-------------
@@ -97,7 +109,7 @@ class DbUtils:
     def delete_product_ingredient(id):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
-        cursor.execute("UPDATE PRODUCT_INGREDIENT SET IS_DELETE = '1' WHERE ID = ?;", (id))
+        cursor.execute("DELETE FROM PRODUCT_INGREDIENT WHERE PRODUCT_ID = ?;", [id])
         conn.commit()
 
     def update_product_ingredient(id, product_id ,ingredient_id):
@@ -111,6 +123,12 @@ class DbUtils:
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT ID, INGREDIENT_NAME, DIMENSION FROM INGREDIENTS WHERE IS_DELETE = '0';")
+        return cursor.fetchall()
+
+    def select_ingredients_name():
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT INGREDIENT_NAME FROM INGREDIENTS WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
     def select_ingredients_id(ingredients):

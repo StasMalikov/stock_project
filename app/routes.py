@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from app.utils import Utils
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -34,11 +35,63 @@ def sign_in():
     users = DbUtils.select_users()
     return render_template('manage_users.html', users = users, len=len(users))
 
-
 @app.route('/manage_products', methods = ['GET','POST'])
 def manage_products():
+    if request.method == 'POST':
+        action = request.form['submit']
+        if action == "Редактировать":
+            prod = Utils.get_product_id(request.form['id'])
+            factories = Utils.clear_select(prod.factory, DbUtils.select_factories_names()) 
+            types = Utils.clear_select(prod.product_type, DbUtils.select_product_types_names()) 
+            ingredients = Utils.clear_select(prod.ingridients, DbUtils.select_ingredients_name()) 
+            return render_template('edit_product.html', product = prod, factories = factories, types = types, ingredients = ingredients)        
+
+        elif action == "Удалить":
+            DbUtils.delete_product(request.form['id'])
+
     products = Utils.get_products()
     return render_template('manage_products.html', products = products, len_p = len(products))
+
+@app.route('/edit_product', methods = ['GET','POST'])
+def edit_product():
+    if request.method == 'POST':
+        expiration_size = request.form['expitation_size']
+
+        if expiration_size == "час":
+            expiration  = int(request.form['expitation_value'])
+
+        elif expiration_size == "день":
+            expiration = 24*int(request.form['expitation_value'])
+
+        elif expiration_size == "месяц":
+            expiration = 730*int(request.form['expitation_value'])
+
+        elif expiration_size == "год":
+            expiration = 8760*int(request.form['expitation_value'])
+        file = request.files['picture']
+        if file.filename=="":
+            DbUtils.update_product(request.form['id'], request.form['prod_name'],\
+                                         DbUtils.select_factories_id(request.form['factory'])[0][0], \
+                                         DbUtils.select_product_types_id(request.form['type'])[0][0], \
+                                         request.form['calorie_content'],\
+                                         expiration,\
+                                         request.form['dimension'],\
+                                         request.form['weight'])
+        else:
+            file.save(app.config['UPLOAD_FOLDER'] + file.filename)
+            DbUtils.update_product_pic(request.form['id'], request.form['prod_name'], DbUtils.select_factories_id(request.form['factory'])[0][0], DbUtils.select_product_types_id(request.form['type'])[0][0],request.form['calorie_content'],expiration,request.form['dimension'],request.form['weight'],file.filename)
+
+        DbUtils.delete_product_ingredient(request.form['id'])
+        DbUtils.insert_product_ingredients(request.form['id'], request.form.getlist('ingredient[]'))
+
+        products = Utils.get_products()
+        return render_template('manage_products.html', products = products, len_p = len(products))
+        
+    factories = DbUtils.select_factories_names()
+    types = DbUtils.select_product_types_names()
+    ingredients = DbUtils.select_ingredients()
+    return render_template('add_product.html', factories = factories, len_f = len(factories), types = types, len_t = len(types), ingredients = ingredients, len_i = len(ingredients))
+
 
 @app.route('/add_product', methods = ['GET','POST'])
 def add_product():
@@ -75,6 +128,8 @@ def add_product():
                                          file.filename)
 
         DbUtils.insert_product_ingredients(prod_id, request.form.getlist('ingredient[]'))
+        products = Utils.get_products()
+        return render_template('manage_products.html', products = products, len_p = len(products))
         
     factories = DbUtils.select_factories_names()
     types = DbUtils.select_product_types_names()

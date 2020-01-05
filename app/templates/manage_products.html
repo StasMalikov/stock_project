@@ -47,18 +47,26 @@
                                 <tr>
                                     <th>Ингредиенты:</td>
                                     <td>
+                                    <select class="form-control">
                                     {% for item in products[i].ingridients %}
+                                    <option>
                                     {{item}}
-                                    <br>
+                                    </option>
                                     {% endfor %}
+                                    </select>
                                     </td>
                                 </tr>
                             </table>
                             
                                 <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Редактировать</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            <form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'manage_products') }}">
+
+                                                <input type="hidden" name="id" value="{{products[i].id}}">
+
+                                                <input type='submit' name = 'submit' value = 'Редактировать' class="btn btn-sm btn-outline-secondary">
+                                                <input type='submit' name = 'submit' value = 'Удалить' class="btn btn-sm btn-outline-danger">
+                                            </form>
                                             </div>
                                 </div>
                         </div>

@@ -8,6 +8,22 @@ class Utils:
             result.append(Product(tmp[i]))
         return result
 
+    def get_product_id(id):
+        tmp = DbUtils.select_product_id(id)
+        return Product(tmp[0])
+    
+    def clear_select(select0, non_select0):
+        if isinstance(select0, str):
+            select = set()
+            select.add(select0)
+        else:
+            select = set(select0)
+        
+        non_select = set()
+        for i in range(len(non_select0)):
+            non_select.add(non_select0[i][0])
+        return list(non_select.difference(select))
+
 class Product:
     def __init__(self, obj):
         self.id = obj[0]
