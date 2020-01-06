@@ -1,0 +1,59 @@
+{% extends "base.html" %} 
+{% block content %}
+<h3>Добавление нового экземпляра продукта</h3>
+<form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'add_prod_unit') }}">
+
+    <div class="form-row">
+    <h5>1. Выберите продукт</h3>
+    </div>
+
+    <div class="form-row">
+
+        <div class="form-group col-md-5">
+            <select name="prod_name" class="form-control">
+                        <option>-</option>
+                        {% for i in range(len_n)  %}
+                        <option>{{names[i][0]}} - {{names[i][1]}}</option>
+                        {% endfor %}
+                    </select>
+        </div>
+
+        <div class="form-group col-md-4">
+        <input type="text" class="form-control" name="find" placeholder="Найти продукт">
+        </div>
+
+        <div class="form-group col-md-1">
+            <input class="btn btn-outline-success" name="s_btn" type="submit" value="Поиск">
+        </div>
+
+        <div class="form-group col-md-2">
+            <input class="btn btn-outline-warning" name="s_btn" type="submit" value="Сброс результатов">
+        </div>
+
+    </div>
+
+    <div class="form-row">
+    <h5>2. Выберите количесто добавляемого продукта</h3>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <input class="form-control" min = 1 type="number" name="prod_count">
+        </div>
+
+    </div>
+
+    <div class="form-row">
+    <h5>3. Выберите дату производства продукта</h3>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <input class="form-control" type="datetime-local" name="prod_date">
+        </div>
+
+    </div>
+
+        <input type="submit" class="btn btn-primary" value='Добавить продукт' name="s_btn">
+</form>
+{% endblock %}

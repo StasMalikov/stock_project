@@ -14,7 +14,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('test.html',)
+    return render_template('test.html')
 
 @app.route('/sign_in', methods = ['GET','POST'])
 def sign_in():
@@ -34,6 +34,20 @@ def sign_in():
         return redirect(url_for('index.html'))
     users = DbUtils.select_users()
     return render_template('manage_users.html', users = users, len=len(users))
+
+@app.route('/add_prod_unit', methods = ['GET','POST'])
+def add_prod_unit():
+    if request.method == 'POST':
+        action = request.form['s_btn']
+        if action == "Поиск":
+            names = DbUtils.select_products_names_find(request.form['find'])
+            return render_template('add_prod_unit.html', names = names, len_n = len(names))
+        elif action == "Добавить продукт":
+            prod_id = DbUtils.select_products_id(request.form['prod_name'].split()[0])[0][0]
+            DbUtils.insert_product_units(prod_id, request.form['prod_count'], request.form['prod_date'], "for sale")
+
+    names = DbUtils.select_products_names()
+    return render_template('add_prod_unit.html', names = names, len_n = len(names))
 
 @app.route('/manage_products', methods = ['GET','POST'])
 def manage_products():

@@ -10,6 +10,29 @@ class DbUtils:
         cursor.execute("SELECT ID, NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE FROM PRODUCTS WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
+    def select_products_id(name):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT ID FROM PRODUCTS WHERE IS_DELETE = '0' AND NAME = ?;", [name])
+        return cursor.fetchall()
+
+    def select_products_names_find(find):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        find = '%' + find + '%'
+        cursor.execute("SELECT P.NAME, PT.TYPE_NAME FROM PRODUCTS AS P JOIN PRODUCT_TYPES AS PT ON P.PRODUCT_TYPE_ID = PT.ID WHERE P.IS_DELETE = '0' AND P.NAME LIKE '%s' ;" % find)
+        return cursor.fetchall()
+
+    def select_products_names():
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT P.NAME, PT.TYPE_NAME
+        FROM PRODUCTS AS P JOIN 
+        PRODUCT_TYPES PT ON
+        P.PRODUCT_TYPE_ID = PT.ID
+        WHERE P.IS_DELETE = '0';''')
+        return cursor.fetchall()
+
     def select_product_id(id):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
