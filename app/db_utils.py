@@ -74,13 +74,37 @@ class DbUtils:
     def select_product_units():
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT ID, PRODUCT_ID, QUANTITY, MANUFACTURE_DATE, RELEVANCE FROM PRODUCT_UNITS WHERE IS_DELETE = '0';")
+        cursor.execute("SELECT ID, PRODUCT_ID, QUANTITY, MANUFACTURE_DATE, RELEVANCE, PRICE FROM PRODUCT_UNITS WHERE IS_DELETE = '0';")
         return cursor.fetchall()
 
-    def insert_product_units(product_id, quantity, manufacture_date, relevance):
+    def select_product_units_all():
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
-        cursor.execute("insert into PRODUCT_UNITS(PRODUCT_ID, QUANTITY, MANUFACTURE_DATE, RELEVANCE, IS_DELETE) values(?, ?, ?, ?, '0')", (product_id, quantity, manufacture_date, relevance))
+        cursor.execute('''SELECT    P.ID, P.NAME, P.FACTORY_ID, 
+                                    P.PRODUCT_TYPE_ID, P.CALORIE_CONTENT, 
+                                    P.EXPIRATION_DATE, P.DIMENSION, P.WEIGHT, P.PICTURE,
+
+                                    PU.ID,
+                                    PU.QUANTITY, 
+                                    PU.MANUFACTURE_DATE,
+                                    PU.RELEVANCE,
+                                    PU.PRICE
+                            FROM    PRODUCT_UNITS AS PU JOIN
+                                        PRODUCTS AS P ON
+                                            PU.PRODUCT_ID = P.ID
+                            WHERE   PU.IS_DELETE = '0';''')
+        return cursor.fetchall()
+
+    # def select_products():
+    #     conn = sqlite3.connect("mydatabase.db")
+    #     cursor = conn.cursor()
+    #     cursor.execute("SELECT ID, NAME, FACTORY_ID, PRODUCT_TYPE_ID, CALORIE_CONTENT, EXPIRATION_DATE, DIMENSION, WEIGHT, PICTURE FROM PRODUCTS WHERE IS_DELETE = '0';")
+    #     return cursor.fetchall()
+
+    def insert_product_units(product_id, quantity, manufacture_date, relevance, price):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("insert into PRODUCT_UNITS(PRODUCT_ID, QUANTITY, MANUFACTURE_DATE, RELEVANCE, PRICE, IS_DELETE) values(?, ?, ?, ?, ?, '0')", (product_id, quantity, manufacture_date, relevance, price))
         conn.commit()
     
     def delete_product_units(id):

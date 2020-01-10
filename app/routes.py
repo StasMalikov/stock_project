@@ -35,6 +35,15 @@ def sign_in():
     users = DbUtils.select_users()
     return render_template('manage_users.html', users = users, len=len(users))
 
+@app.route('/manage_prod_units', methods = ['GET','POST'])
+def manage_prod_units():
+    if request.method == 'POST':
+        action = request.form['submit']
+        if action == "Удалить":
+            DbUtils.delete_product_units(request.form['id'])
+    products = Utils.get_prod_units()
+    return render_template('manage_prod_units.html', products = products, len_p = len(products))
+
 @app.route('/add_prod_unit', methods = ['GET','POST'])
 def add_prod_unit():
     if request.method == 'POST':
@@ -44,7 +53,9 @@ def add_prod_unit():
             return render_template('add_prod_unit.html', names = names, len_n = len(names))
         elif action == "Добавить продукт":
             prod_id = DbUtils.select_products_id(request.form['prod_name'].split()[0])[0][0]
-            DbUtils.insert_product_units(prod_id, request.form['prod_count'], request.form['prod_date'], "for sale")
+            DbUtils.insert_product_units(prod_id, request.form['prod_count'], request.form['prod_date'], "for sale", request.form['price'])
+            products = Utils.get_prod_units()
+            return render_template('manage_prod_units.html', products = products, len_p = len(products))
 
     names = DbUtils.select_products_names()
     return render_template('add_prod_unit.html', names = names, len_n = len(names))

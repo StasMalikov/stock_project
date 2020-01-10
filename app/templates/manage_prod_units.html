@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<main role="main">
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+        <h3>Список экземпляров продуктов</h3>
+            <div class="row">
+         <style>
+            th { 
+                text-align: left; /* Выравнивание по левому краю */                                 
+                padding: 5px; /* Поля вокруг содержимого ячеек */
+            }
+            td { 
+                text-align: right; /* Выравнивание по левому краю */
+                padding: 5px; /* Поля вокруг содержимого ячеек */
+            }
+  </style>
+                {% for i in range(len_p) %}
+                <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img style="height: 250px;" widtd="100%"  src="{{ url_for('static', filename = 'img/' + products[i].picture) }}"  class="img-tdumbnail" >
+
+                        <div class="card-body">
+                            <h5 align = "center" >{{products[i].name}}</h3>
+                            <table>
+                                <tr>
+                                    <th>Вес:</td>
+                                    <td>{{products[i].weight}} {{products[i].dimension}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Калории:</td>
+                                    <td>{{products[i].calories}} ккал</td>
+                                </tr>
+                                <tr>
+                                    <th>Производитель:</td>
+                                    <td>{{products[i].factory}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Срок годности:</td>
+                                    <td>{{products[i].expiration}} часов</td>
+                                </tr>
+                                <tr>
+                                    <th>Тип продукта:</td>
+                                    <td>{{products[i].product_type}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ингредиенты:</td>
+                                    <td>
+                                    <select class="form-control">
+                                    {% for item in products[i].ingridients %}
+                                    <option>
+                                    {{item}}
+                                    </option>
+                                    {% endfor %}
+                                    </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <!-- prod unit informatoin -->
+                            <table>
+                                <tr>
+                                    <th>Дата</td>
+                                    <td><input type="datetime-local" value="{{products[i].manufacture_date}}"></td>
+                                </tr>
+
+                                <tr>
+                                    <th>Количество</td>
+                                    <td>{{products[i].quantity}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <th>Состояние продукта</td>
+                                    <td>{{products[i].relevance}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Цена</td>
+                                    <td>{{products[i].price}}</td>
+                                </tr>
+                            </table>
+                            
+                                <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                            <form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'manage_prod_units') }}">
+
+                                                <input type="hidden" name="id" value="{{products[i].unit_id}}">
+                                                <input type='submit' name = 'submit' value = 'Удалить' class="btn btn-sm btn-outline-danger">
+                                            </form>
+                                            </div>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+                    {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %} 
+
+    
+    
+    
