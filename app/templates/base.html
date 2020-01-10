@@ -71,15 +71,17 @@
         {% if login !="" %}
         <form class="form-inline">
         
-            <input class="btn btn-outline-primary" type="button" value="{{login}}">&nbsp;
-            <input class="btn btn-outline-danger" type="submit" value="Выход">
+            <input class="btn btn-outline-primary" type="button" value="{{login}}">
+            &nbsp;
+            <a class="btn btn-outline-danger" href="{{ url_for('index') }}">Выход</a>
         
         </form>
         {% else %}
          <form class="form-inline">
-        
-            <input class="btn btn-outline-primary" type="button" value="Вход">&nbsp;
-            <input class="btn btn-outline-success" type="submit" value="Регистрация">
+
+            <a class="btn btn-outline-primary" href="{{ url_for('index') }}">Вход</a>
+            &nbsp;
+            <a class="btn btn-outline-success" href="{{ url_for('registration') }}">Регистрация</a>
         
         </form>
         {% endif %}

@@ -7,17 +7,28 @@ from werkzeug.utils import secure_filename
 from app.utils import Utils, User
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods = ['GET','POST'])
 def index():
+    app.config['USER'] = User(-1 ,"", "", "no_auth", "")
     return render_template('index.html')
 
 @app.route('/test')
 def test():
     return render_template('test.html')
 
+# @app.route('/logout', methods = ['GET','POST'])
+# def logout():
+#     if request.method == 'POST':
+#         app.config['USER'] = User(-1 ,"", "", "no_auth", "")
+#         return render_template('index.html')
+#     return render_template('index.html')
+
 @app.route('/sign_in', methods = ['GET','POST'])
 def sign_in():
     if request.method == 'POST':
+        action = request.form['submit']
+        if action == "Регистрация":
+            return render_template('registration.html')
         login = request.form['login']
         password = request.form['password']
         p_hash = DbUtils.get_user_password(login)
@@ -34,6 +45,18 @@ def sign_in():
     else:
         return redirect(url_for('index.html'))
     return render_template('index.html')
+
+
+@app.route('/registration', methods = ['GET','POST'])
+def registration():
+    if request.method == 'POST':
+        DbUtils.insert_user(request.form['login'],request.form['password'], request.form['email'], request.form['user_type'], request.form['full_name'])
+        tmp = DbUtils.select_user_full(request.form['login'])
+        app.config['USER'] = User(tmp[0][0], tmp[0][1], tmp[0][2], tmp[0][3], tmp[0][4])
+        products = Utils.get_prod_units()
+        return render_template('buy_prod_units.html', products = products, len_p = len(products), login = app.config['USER'].login)
+
+    return render_template('registration.html')
 
 
 @app.route('/buy_prod_units', methods = ['GET','POST'])

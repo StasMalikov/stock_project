@@ -14,13 +14,17 @@
                 <div class="alert alert-primary" role="alert">{{ messege }}</div>
                 {% endif %}
                 <div class="form-group">
-                    <input class="form-control" name="login" aria-describedby="emailHelp" placeholder="Логин" required>
+                    <input class="form-control" name="login" aria-describedby="emailHelp" placeholder="Логин" >
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Пароль" required>
+                    <input type="password" class="form-control" name="password" placeholder="Пароль" >
                 </div>
-
-                <button type="action" class="btn btn-primary">Вход</button>
+                <div class="form-row">
+                <p>
+                    <input  class="btn btn-primary" type='submit' name = 'submit' value = 'Вход' >
+                    <input class="btn btn-primary" type='submit' name = 'submit' value = 'Регистрация' >
+                </p>
+                </div>
             </form>
         </div>
         <div class='col-md-4'>
