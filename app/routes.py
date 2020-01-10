@@ -4,13 +4,14 @@ from flask import render_template, flash, redirect, url_for, request
 from app.db_utils import DbUtils
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from app.utils import Utils
+from app.utils import Utils, User
 
+user = User(-1 ,"", "", "no_auth", "")
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html',)
+    return render_template('index.html')
 
 @app.route('/test')
 def test():
@@ -24,6 +25,8 @@ def sign_in():
         p_hash = DbUtils.get_user_password(login)
         if p_hash is not None:
             if check_password_hash(DbUtils.get_user_password(login), password):
+                tmp = DbUtils.select_user_full(login)
+                user = User(tmp[0][0], tmp[0][1], tmp[0][2], tmp[0][3], tmp[0][4])
                 users = DbUtils.select_users()
                 return render_template('manage_users.html', users = users, len=len(users))
             else:
@@ -32,8 +35,13 @@ def sign_in():
            return render_template('index.html' , messege = "Неправильный логин или пароль") 
     else:
         return redirect(url_for('index.html'))
-    users = DbUtils.select_users()
-    return render_template('manage_users.html', users = users, len=len(users))
+    return render_template('index.html')
+
+
+@app.route('/buy_prod_units', methods = ['GET','POST'])
+def buy_prod_units():
+    products = Utils.get_prod_units()
+    return render_template('buy_prod_units.html', products = products, len_p = len(products), login="")
 
 @app.route('/manage_prod_units', methods = ['GET','POST'])
 def manage_prod_units():

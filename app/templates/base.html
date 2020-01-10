@@ -49,13 +49,41 @@
                         <a class="dropdown-item" href="/manage_products">Продукты</a>
                         <a class="dropdown-item" href="/add_prod_unit">Добавить экземпляр продуктов</a>
                         <a class="dropdown-item" href="/manage_prod_units">Экземпляры продуктов</a>
+                    </div>
+                </li>
 
-                        
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Покупка</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="/buy_prod_units">Список товаров</a>
                     </div>
                 </li>
 
             </ul>
         </div>
+        
+
+        <!-- <form class="form-inline mt-2 mt-md-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" padding= "20px" >Search</button>
+        </form> -->
+
+        {% if login !="" %}
+        <form class="form-inline">
+        
+            <input class="btn btn-outline-primary" type="button" value="{{login}}">&nbsp;
+            <input class="btn btn-outline-danger" type="submit" value="Выход">
+        
+        </form>
+        {% else %}
+         <form class="form-inline">
+        
+            <input class="btn btn-outline-primary" type="button" value="Вход">&nbsp;
+            <input class="btn btn-outline-success" type="submit" value="Регистрация">
+        
+        </form>
+        {% endif %}
+
     </nav>{% endblock %}
     <div class="container">
         {% block content%} {% endblock %}

@@ -31,6 +31,15 @@ class Utils:
             non_select.add(non_select0[i][0])
         return list(non_select.difference(select))
 
+class User:
+    def __init__(self, id, login, email, u_type, fullname):
+        self.id = id
+        self.login = login
+        self.email = email
+        self.type = u_type
+        self.fullname = fullname
+
+
 class Product:
     def __init__(self, obj):
         self.id = obj[0]

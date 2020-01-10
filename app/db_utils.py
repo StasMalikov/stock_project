@@ -360,6 +360,12 @@ class DbUtils:
         cursor.execute('''SELECT ID, LOGIN, EMAIL, USER_TYPE, FULL_NAME FROM USERS WHERE IS_DELETE = '0';''')
         return cursor.fetchall()
 
+    def select_user_full(login):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT ID, LOGIN, EMAIL, USER_TYPE, FULL_NAME FROM USERS WHERE IS_DELETE = '0' AND LOGIN = ?;''', [login])
+        return cursor.fetchall()
+
     def delete_user(id):
         conn = sqlite3.connect("mydatabase.db")
         cursor = conn.cursor()
