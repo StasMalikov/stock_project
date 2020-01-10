@@ -3,6 +3,23 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class DbUtils:
 
+# -----------------------GOODS------------METHODS-------------
+    def insert_good(prod_id, units_count, order_id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("insert into GOODS(UNITS_COUNT, PRODUCT_UNIT_ID, ORDER_ID) values(?, ?, ?)", (units_count, prod_id, order_id))
+        conn.commit()
+        return cursor.lastrowid
+
+# -----------------------ORDERS------------METHODS-------------
+
+    def insert_order(status, user_id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("insert into ORDERS(STATUS, USER_ID) values(?, ?)", (status, user_id))
+        conn.commit()
+        return cursor.lastrowid
+
 # -----------------------PRODUCTS------------METHODS-------------
     def select_products():
         conn = sqlite3.connect("mydatabase.db")

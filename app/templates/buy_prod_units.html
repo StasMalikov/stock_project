@@ -6,6 +6,12 @@
     <div class="container">
         <h3>Список товаров</h3>
             <div class="row">
+                {% if messege %}
+                <script type="text/javascript">
+                    alert("{{messege}}")
+                </script>
+                {% endif %}
+
          <style>
             th { 
                 text-align: left; /* Выравнивание по левому краю */                                 
@@ -59,6 +65,7 @@
                             </table>
                             <hr>
                             <!-- prod unit informatoin -->
+                            <form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'good_to_order') }}">
                             <table>
                                 <tr>
                                     <th>Дата</td>
@@ -86,13 +93,14 @@
                             <hr>
                                 <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                            <form method="post" enctype = 'multipart/form-data' action="{{ url_for( 'manage_prod_units') }}">
+                                            
 
                                                 <input type="hidden" name="id" value="{{products[i].unit_id}}">
                                                 <button type="submit" class="btn btn-success">Добавить в корзину</button>
-                                            </form>
+                                            
                                             </div>
                                 </div>
+                            </form>
                         </div>
                     </div>
                     </div>

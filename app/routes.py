@@ -12,16 +12,6 @@ def index():
     app.config['USER'] = User(-1 ,"", "", "no_auth", "")
     return render_template('index.html')
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
-# @app.route('/logout', methods = ['GET','POST'])
-# def logout():
-#     if request.method == 'POST':
-#         app.config['USER'] = User(-1 ,"", "", "no_auth", "")
-#         return render_template('index.html')
-#     return render_template('index.html')
 
 @app.route('/sign_in', methods = ['GET','POST'])
 def sign_in():
@@ -59,10 +49,23 @@ def registration():
     return render_template('registration.html')
 
 
+@app.route('/good_to_order', methods = ['GET','POST'])
+def good_to_order():
+    if request.method == 'POST':
+        if app.config['ORDER_ID'] == -1:
+            app.config['ORDER_ID'] = DbUtils.insert_order("open", app.config['USER'].id)
+        DbUtils.insert_good(request.form['id'], request.form['count'], app.config['ORDER_ID'])
+        products = Utils.get_prod_units()
+        return render_template('buy_prod_units.html', products = products, len_p = len(products), login = app.config['USER'].login, type = app.config['USER'].type, messege = "Товар успешно добавлен в корзину")
+    products = Utils.get_prod_units()
+    return render_template('buy_prod_units.html', products = products, len_p = len(products), login = app.config['USER'].login, type = app.config['USER'].type)
+
+
+
 @app.route('/buy_prod_units', methods = ['GET','POST'])
 def buy_prod_units():
     products = Utils.get_prod_units()
-    return render_template('buy_prod_units.html', products = products, len_p = len(products), login = app.config['USER'].login)
+    return render_template('buy_prod_units.html', products = products, len_p = len(products), login = app.config['USER'].login, type = app.config['USER'].type)
 
 @app.route('/manage_prod_units', methods = ['GET','POST'])
 def manage_prod_units():

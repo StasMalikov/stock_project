@@ -68,9 +68,18 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" padding= "20px" >Search</button>
         </form> -->
 
+        {% if type %}
+         {% if type == "user" %}
+        <form class="form-inline">
+            <a class="btn btn-outline-warning" href="{{ url_for('index') }}">Корзина</a>
+        </form>
+        {% endif %}
+        {% endif %}
+
+
         {% if login !="" %}
         <form class="form-inline">
-        
+            &nbsp;
             <input class="btn btn-outline-primary" type="button" value="{{login}}">
             &nbsp;
             <a class="btn btn-outline-danger" href="{{ url_for('index') }}">Выход</a>

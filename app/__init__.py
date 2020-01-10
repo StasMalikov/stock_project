@@ -9,7 +9,10 @@ app = Flask(__name__)
 app.config.from_object(Config)
 app.config['DEBUG'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 app.config['USER'] = User(-1 ,"", "", "no_auth", "")
+app.config['ORDER_ID'] = -1
+
 bootstrap = Bootstrap(app)
 login = LoginManager(app)
 
