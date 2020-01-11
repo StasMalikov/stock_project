@@ -11,6 +11,18 @@ class DbUtils:
         conn.commit()
         return cursor.lastrowid
 
+    def select_goods(order_id):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT G.ID, G.UNITS_COUNT, G.PRODUCT_UNIT_ID, G.ORDER_ID, P.NAME, PU.PRICE
+                             FROM GOODS AS G 
+                             JOIN PRODUCT_UNITS AS PU ON
+                             PU.ID = G.PRODUCT_UNIT_ID
+                             JOIN PRODUCTS AS P ON
+                             PU.PRODUCT_ID = P.ID
+                             WHERE G.ORDER_ID = ?;''', [order_id])
+        return cursor.fetchall()
+
 # -----------------------ORDERS------------METHODS-------------
 
     def insert_order(status, user_id):
